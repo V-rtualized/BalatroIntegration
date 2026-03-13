@@ -160,6 +160,11 @@ function BInt._context_methods:cash_out()
 	local mock_e = { config = {} }
 	G.FUNCS.cash_out(mock_e)
 
+	BInt._wait.for_condition(function()
+		return G.STATE == G.STATES.SHOP
+			and G.shop_jokers and #G.shop_jokers.cards > 0
+	end, 30, "Timeout waiting for shop to open")
+
 	BInt._wait.stable_drain()
 
 	return BInt.Ok()

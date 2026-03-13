@@ -83,10 +83,43 @@ function BInt._wait.base_queue_empty()
 	return not base or #base == 0
 end
 
-function BInt._wait.stable_drain(stable_frames, timeout)
-	stable_frames = stable_frames or 5
+function BInt._wait.has_pending_delays()
+	for _, q in pairs(G.E_MANAGER.queues) do
+		local blocked = false
+		for _, event in ipairs(q) do
+			if not event.complete then
+				if blocked and event.blockable then
+					goto continue
+				end
+
+				if event.blocking then
+					local trigger = event.trigger
+					if trigger == "after" or trigger == "ease" or trigger == "before" then
+						if event.delay and event.delay > 0 then
+							if not event.start_timer then
+								-- Event hasn't been handled yet, delay is fully pending
+								return true
+							end
+							local elapsed = G.TIMERS[event.timer] - event.time
+							if elapsed < event.delay then
+								return true
+							end
+						end
+					end
+					blocked = true
+				end
+			end
+			::continue::
+		end
+	end
+	return false
+end
+
+function BInt._wait.stable_drain(stable_ticks, timeout)
+	stable_ticks = stable_ticks or 3
 	local stable_count = 0
 	local last_size = -1
+	local last_qlp = G.E_MANAGER.queue_last_processed
 	local timed_out = make_timeout(timeout, "Timeout waiting for stable drain")
 	BInt._wait_condition = function()
 		if timed_out() then
@@ -96,11 +129,25 @@ function BInt._wait.stable_drain(stable_frames, timeout)
 			stable_count = 0
 			return false
 		end
+
+		-- Only evaluate on actual EventManager ticks (when queue_last_processed advances).
+		-- Game:update runs at high fps (~500/s) but EventManager only ticks ~60/s.
+		-- Counting raw frames would declare stability between ticks while events
+		-- are still waiting to process.
+		local qlp = G.E_MANAGER.queue_last_processed
+		if qlp == last_qlp then
+			return false
+		end
+		last_qlp = qlp
+
 		local base = G.E_MANAGER.queues["base"]
 		local size = base and #base or 0
-		if size == last_size then
+		if size == 0 then
+			return true
+		end
+		if size == last_size and not BInt._wait.has_pending_delays() then
 			stable_count = stable_count + 1
-			return stable_count >= stable_frames
+			return stable_count >= stable_ticks
 		end
 		last_size = size
 		stable_count = 0
@@ -169,4 +216,18 @@ function BInt._wait.frames(n)
 		return count >= n
 	end
 	coroutine.yield()
+end
+
+function BInt._wait.for_events(timeout)
+	local done = false
+	G.E_MANAGER:add_event(Event({
+		trigger = "immediate",
+		func = function()
+			done = true
+			return true
+		end,
+	}))
+	BInt._wait.for_condition(function()
+		return done
+	end, timeout or DEFAULT_TIMEOUT, "Timeout waiting for queued events to complete")
 end

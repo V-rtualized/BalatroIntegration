@@ -148,13 +148,20 @@ function BInt._context_methods:discard()
 end
 
 function BInt._context_methods:cash_out()
+	G.GAME.current_round.dollars = nil
+
 	BInt._wait.for_condition(function()
 		return G.round_eval ~= nil
-	end, nil, "Timeout waiting for round_eval UI")
+			and G.GAME.current_round.dollars ~= nil
+	end, 30, "Timeout waiting for round evaluation to complete")
+
+	BInt._wait.stable_drain()
 
 	local mock_e = { config = {} }
 	G.FUNCS.cash_out(mock_e)
-	BInt._wait.for_state(G.STATES.SHOP)
+
+	BInt._wait.stable_drain()
+
 	return BInt.Ok()
 end
 

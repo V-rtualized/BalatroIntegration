@@ -70,8 +70,8 @@ end)
 ```
 
 See [examples/](examples/) for complete test suites:
-- **[ArcaneArsenal](examples/ArcaneArsenal/)** — tests for tarots, spectrals, vouchers, custom decks, boss blinds, and jokers
-- **[OddsAndEnds](examples/OddsAndEnds/)** — tests for RNG-driven jokers with mock sequences and forced outcomes
+- **[ArcaneArsenal](examples/ArcaneArsenal/)**: tests for tarots, spectrals, vouchers, custom decks, boss blinds, and jokers
+- **[OddsAndEnds](examples/OddsAndEnds/)**: tests for RNG-driven jokers with mock sequences and forced outcomes
 
 ## Installation
 
@@ -96,13 +96,13 @@ end
 
 See the [wiki](wiki/) for the full API reference:
 
-- [Getting Started](wiki/Getting-Started.md) — write your first test
-- [Run Control](wiki/Run-Control.md) — start and restart runs
-- [Hand Interaction](wiki/Hand-Interaction.md) — highlight, play, discard
-- [Shop Interaction](wiki/Shop-Interaction.md) — buy, sell, reroll
-- [Cheats](wiki/Cheats.md) — spawn cards, set money, modify state
-- [State Queries](wiki/State-Queries.md) — read game state for assertions
-- [Mocking Randomness](wiki/Mocking-Randomness.md) — force specific RNG outcomes
-- [Assertions](wiki/Assertions.md) — assert_eq, assert_gt, and more
-- [Test Parameters](wiki/Test-Parameters.md) — speed, immortality, infinite money
-- [Events](wiki/Events.md) — lifecycle hooks
+- [Getting Started](wiki/Getting-Started.md), write your first test
+- [Run Control](wiki/Run-Control.md), start and restart runs
+- [Hand Interaction](wiki/Hand-Interaction.md), highlight, play, discard
+- [Shop Interaction](wiki/Shop-Interaction.md), buy, sell, reroll
+- [Cheats](wiki/Cheats.md), spawn cards, set money, modify state
+- [State Queries](wiki/State-Queries.md), read game state for assertions
+- [Mocking Randomness](wiki/Mocking-Randomness.md), force specific RNG outcomes
+- [Assertions](wiki/Assertions.md), assert_eq, assert_gt, and more
+- [Test Parameters](wiki/Test-Parameters.md),speed, immortality, infinite money
+- [Events](wiki/Events.md), lifecycle hooks

@@ -1,0 +1,80 @@
+BInt.register_test("assertions/assert_eq_pass", function(t)
+	t:assert_eq(1, 1, "integers should be equal")
+	t:assert_eq("hello", "hello", "strings should be equal")
+	t:assert_eq(nil, nil, "nil should equal nil")
+	t:log("all assert_eq checks passed")
+end)
+
+BInt.register_test("assertions/assert_eq_fail", function(t)
+	t:assert_eq(1, 2, "should fail")
+	t:log("THIS SHOULD NOT PRINT")
+end)
+
+BInt.register_test("assertions/assert_neq_pass", function(t)
+	t:assert_neq(1, 2, "different integers")
+	t:assert_neq("a", "b", "different strings")
+	t:assert_neq(nil, false, "nil vs false")
+	t:log("all assert_neq checks passed")
+end)
+
+BInt.register_test("assertions/assert_neq_fail", function(t)
+	t:assert_neq(5, 5, "should fail")
+	t:log("THIS SHOULD NOT PRINT")
+end)
+
+BInt.register_test("assertions/assert_gt_pass", function(t)
+	t:assert_gt(5, 3)
+	t:assert_gt(0, -1)
+end)
+
+BInt.register_test("assertions/assert_gt_fail", function(t)
+	t:assert_gt(3, 5, "should fail")
+end)
+
+BInt.register_test("assertions/assert_gte_pass", function(t)
+	t:assert_gte(5, 5)
+	t:assert_gte(6, 5)
+end)
+
+BInt.register_test("assertions/assert_lt_pass", function(t)
+	t:assert_lt(3, 5)
+	t:assert_lt(-1, 0)
+end)
+
+BInt.register_test("assertions/assert_lte_pass", function(t)
+	t:assert_lte(5, 5)
+	t:assert_lte(4, 5)
+end)
+
+BInt.register_test("assertions/assert_true_pass", function(t)
+	t:assert_true(true)
+	t:assert_true(1)
+	t:assert_true("nonempty")
+end)
+
+BInt.register_test("assertions/assert_true_fail", function(t)
+	t:assert_true(false, "should fail")
+end)
+
+BInt.register_test("assertions/assert_false_pass", function(t)
+	t:assert_false(false)
+	t:assert_false(nil)
+end)
+
+BInt.register_test("assertions/assert_false_fail", function(t)
+	t:assert_false(true, "should fail")
+end)
+
+BInt.register_test("assertions/assert_contains_pass", function(t)
+	t:assert_contains({ 1, 2, 3 }, 2)
+	t:assert_contains({ "a", "b", "c" }, "b")
+end)
+
+BInt.register_test("assertions/assert_contains_fail", function(t)
+	t:assert_contains({ 1, 2, 3 }, 99, "should fail")
+end)
+
+BInt.register_test("assertions/fail_halts_test", function(t)
+	t:fail("intentional failure")
+	t:log("THIS SHOULD NOT PRINT")
+end)

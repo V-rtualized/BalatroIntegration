@@ -1,0 +1,21 @@
+{
+  "id": "ArcaneArsenal",
+  "name": "Arcane Arsenal",
+  "display_name": "Arcane Arsenal",
+  "author": [
+    "Virtualized"
+  ],
+  "description": "A collection of custom game objects across every type: consumables, vouchers, decks, blinds, and jokers. Serves as an example mod for the Integration testing framework.",
+  "prefix": "arcane",
+  "main_file": "main.lua",
+  "priority": 0,
+  "badge_colour": "8B45A6",
+  "badge_text_colour": "FFFFFF",
+  "version": "0.1.0",
+  "dependencies": [
+    "Steamodded (>=1.0.0~BETA-1221a)",
+    "Lovely (>=0.9)",
+    "Balatro (>=1.0.1o)"
+  ],
+  "conflicts": []
+}

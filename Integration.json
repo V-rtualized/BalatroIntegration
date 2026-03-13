@@ -1,0 +1,21 @@
+{
+  "id": "Integration",
+  "name": "Integration",
+  "display_name": "Integration",
+  "author": [
+    "Virtualized"
+  ],
+  "description": "Integration testing framework for Balatro mod creators. Provides APIs for automated run control, card manipulation, shop interaction, and assertion-based testing.",
+  "prefix": "integration",
+  "main_file": "core.lua",
+  "priority": -100000,
+  "badge_colour": "4A90D9",
+  "badge_text_colour": "FFFFFF",
+  "version": "0.1.0",
+  "dependencies": [
+    "Steamodded (>=1.0.0~BETA-1221a)",
+    "Lovely (>=0.9)",
+    "Balatro (>=1.0.1o)"
+  ],
+  "conflicts": []
+}

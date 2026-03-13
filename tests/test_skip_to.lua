@@ -1,0 +1,43 @@
+BInt.register_test("skip_to/ante_2_small", function(t)
+	t:start_run({ seed = "JOKER123" })
+	t:skip_to(2, "small"):assert()
+	t:assert_eq(G.GAME.round_resets.ante, 2, "ante should be 2")
+	t:assert_eq(G.GAME.blind_on_deck, "Small", "blind should be Small")
+	t:assert_eq(t:get_state(), G.STATES.BLIND_SELECT, "should be on blind select")
+	t:log("skipped to ante 2 small")
+end)
+
+BInt.register_test("skip_to/ante_3_boss", function(t)
+	t:start_run({ seed = "JOKER123" })
+	t:skip_to(3, "boss"):assert()
+	t:assert_eq(G.GAME.round_resets.ante, 3, "ante should be 3")
+	t:assert_eq(G.GAME.blind_on_deck, "Boss", "blind should be Boss")
+	t:assert_true(
+		G.GAME.round_resets.blind_choices.Boss ~= nil,
+		"should have generated a boss blind"
+	)
+	t:log("skipped to ante 3 boss: " .. tostring(G.GAME.round_resets.blind_choices.Boss))
+end)
+
+BInt.register_test("skip_to/then_select_blind", function(t)
+	t:start_run({ seed = "JOKER123" })
+	t:skip_to(2, "small"):assert()
+	t:select_blind():assert()
+	t:assert_eq(t:get_state(), G.STATES.SELECTING_HAND, "should be selecting hand after skip_to + select_blind")
+	local hand = t:get_hand()
+	t:assert_true(#hand > 0, "should have cards in hand")
+	t:log("skip_to then select_blind works, hand: " .. #hand .. " cards")
+end)
+
+BInt.register_test("skip_to/invalid_blind", function(t)
+	t:start_run({ seed = "JOKER123" })
+	local result = t:skip_to(1, "invalid")
+	result:assert_fail("skip_to with invalid blind should fail")
+end)
+
+BInt.register_test("skip_to/default_small", function(t)
+	t:start_run({ seed = "JOKER123" })
+	t:skip_to(4):assert()
+	t:assert_eq(G.GAME.round_resets.ante, 4, "ante should be 4")
+	t:assert_eq(G.GAME.blind_on_deck, "Small", "default blind should be Small")
+end)

@@ -1,0 +1,17 @@
+BInt.register_test("wait/frames", function(t)
+	t:log("waiting 5 frames...")
+	BInt._wait.frames(5)
+	t:log("5 frames elapsed")
+end)
+
+BInt.register_test("wait/stable_drain", function(t)
+	t:log("waiting for stable drain...")
+	BInt._wait.stable_drain()
+	t:log("queues stable")
+end)
+
+BInt.register_test("wait/queues_empty_check", function(t)
+	local empty = BInt._wait.queues_empty()
+	t:assert_true(empty ~= nil, "queues_empty should return a boolean")
+	t:log("queues_empty returned: " .. tostring(empty))
+end)

@@ -1,0 +1,21 @@
+{
+  "id": "OddsAndEnds",
+  "name": "Odds and Ends",
+  "display_name": "Odds & Ends",
+  "author": [
+    "Virtualized"
+  ],
+  "description": "A set of probability-themed jokers. Also serves as an example mod for the Integration testing framework.",
+  "prefix": "odds",
+  "main_file": "main.lua",
+  "priority": 0,
+  "badge_colour": "2E8B57",
+  "badge_text_colour": "FFFFFF",
+  "version": "0.1.0",
+  "dependencies": [
+    "Steamodded (>=1.0.0~BETA-1221a)",
+    "Lovely (>=0.9)",
+    "Balatro (>=1.0.1o)"
+  ],
+  "conflicts": []
+}

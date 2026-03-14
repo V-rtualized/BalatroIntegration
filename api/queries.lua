@@ -57,6 +57,10 @@ function BInt._context_methods:get_shop_cards()
 				key = card.config.center.key,
 				cost = card.cost,
 				type = card.ability.set,
+				mult = card.ability.mult or 0,
+				x_mult = card.ability.x_mult or 1,
+				chips = card.ability.h_chips or 0,
+				extra = card.ability.extra,
 			})
 		end
 	end

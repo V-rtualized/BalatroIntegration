@@ -297,9 +297,11 @@ function BInt._context_methods:buy_pack(id_or_index)
 		G.STATES.BUFFOON_PACK,
 		G.STATES.SMODS_BOOSTER_OPENED,
 	})
+	BInt._wait.stable_drain()
 	BInt._wait.for_condition(function()
 		return G.pack_cards and G.pack_cards.cards and #G.pack_cards.cards > 0
 	end, nil, "Timeout waiting for pack cards")
+	BInt._wait.stable_drain()
 	return BInt.Ok({ card = { key = card.config.center.key, cost = card.cost } })
 end
 
@@ -349,10 +351,19 @@ function BInt._context_methods:use_consumable(id_or_index)
 	if not card then
 		return BInt.Fail("consumable_not_found", { key = tostring(id_or_index), reason = err })
 	end
+	local key = card.config.center.key
 	local mock_e = { config = { ref_table = card, button = "use_card" } }
 	G.FUNCS.use_card(mock_e)
+	-- Wait for the card to actually be consumed
+	BInt._wait.for_condition(function()
+		if not G.consumeables then return true end
+		for _, c in ipairs(G.consumeables.cards) do
+			if c == card then return false end
+		end
+		return true
+	end, nil, "Timeout waiting for consumable to be used")
 	BInt._wait.stable_drain()
-	return BInt.Ok({ card = { key = card.config.center.key } })
+	return BInt.Ok({ card = { key = key } })
 end
 
 function BInt._context_methods:highlight(indices)
@@ -458,16 +469,31 @@ function BInt._context_methods:choose_pack_card(id_or_index)
 	if not card then
 		return BInt.Fail("not_in_pack", { key = tostring(id_or_index), reason = err })
 	end
+	local key = card.config.center.key
 	local mock_e = { config = { ref_table = card, button = "use_card" } }
 	G.FUNCS.use_card(mock_e)
+	-- Wait for the card to leave the pack
+	BInt._wait.for_condition(function()
+		if not G.pack_cards or not G.pack_cards.cards then return true end
+		for _, c in ipairs(G.pack_cards.cards) do
+			if c == card then return false end
+		end
+		return true
+	end, nil, "Timeout waiting for pack card to be used")
 	BInt._wait.stable_drain()
-	return BInt.Ok({ card = { key = card.config.center.key } })
+	-- If pack is done, wait for return to shop
+	if G.STATE ~= G.STATES.SHOP and (not G.pack_cards or not G.pack_cards.cards or #G.pack_cards.cards == 0) then
+		BInt._wait.for_state(G.STATES.SHOP)
+		BInt._wait.stable_drain()
+	end
+	return BInt.Ok({ card = { key = key } })
 end
 
 function BInt._context_methods:skip_pack()
 	local mock_e = {}
 	G.FUNCS.skip_booster(mock_e)
 	BInt._wait.for_state(G.STATES.SHOP)
+	BInt._wait.stable_drain()
 	return BInt.Ok()
 end
 

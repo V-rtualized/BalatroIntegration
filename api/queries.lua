@@ -60,6 +60,9 @@ function BInt._context_methods:get_shop_cards()
 				mult = card.ability.mult or 0,
 				x_mult = card.ability.x_mult or 1,
 				chips = card.ability.h_chips or 0,
+				t_mult = card.ability.t_mult or 0,
+				t_chips = card.ability.t_chips or 0,
+				hand_type = card.ability.type or "",
 				extra = card.ability.extra,
 			})
 		end
@@ -169,6 +172,17 @@ function BInt._context_methods:get_pack_cards()
 					suit = card.base.suit,
 					id = BInt._resolve.card_to_id(card),
 					type = card.ability.set,
+				})
+			elseif card.ability.set == "Joker" then
+				table.insert(cards, {
+					key = card.config.center.key,
+					type = card.config.center.set,
+					mult = card.ability.mult or 0,
+					x_mult = card.ability.x_mult or 1,
+					chips = card.ability.h_chips or 0,
+					t_mult = card.ability.t_mult or 0,
+					t_chips = card.ability.t_chips or 0,
+					hand_type = card.ability.type or "",
 				})
 			else
 				table.insert(cards, {

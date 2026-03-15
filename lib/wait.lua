@@ -115,6 +115,18 @@ function BInt._wait.has_pending_delays()
 	return false
 end
 
+local function cleanup_attention_text()
+	if not G.I or not G.I.UIBOX then
+		return
+	end
+	for i = #G.I.UIBOX, 1, -1 do
+		local uibox = G.I.UIBOX[i]
+		if uibox.attention_text then
+			uibox:remove()
+		end
+	end
+end
+
 function BInt._wait.stable_drain(stable_ticks, timeout)
 	stable_ticks = stable_ticks or 3
 	local stable_count = 0
@@ -155,6 +167,7 @@ function BInt._wait.stable_drain(stable_ticks, timeout)
 	end
 	coroutine.yield()
 	check_timeout_fail()
+	cleanup_attention_text()
 end
 
 function BInt._wait.for_state(target_state, timeout)
